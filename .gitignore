@@ -1,0 +1,32 @@
+# Local editor settings
+.vscode/
+.idea/
+.vs/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local virtual environments
+.venv/
+venv/
+env/
+
+# Test coverage output
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini

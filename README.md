@@ -76,7 +76,7 @@ The following components have been implemented:
 **Note:** Initial schedules are randomly generated and may not satisfy all deadlines. The fitness function and genetic operators will be responsible for evaluating and improving these schedules.
 
 ### 4.5 Chromosome Validation
-**File:** `Step2_Fitness Function/fitness_function.py`
+**File:** `step2_fitness_function/fitness_function.py`
 
 **Function:** `validate_chromosome(chromosome)`
 
@@ -144,3 +144,17 @@ fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty)
 | 4 | GA Implementation | To Do |
 | 5 | Experiments & Visualization | To Do |
 
+
+## Python Package Layout and Execution
+
+The five Step directories use lowercase names with underscores and contain __init__.py package markers. Shared validation lives in `Shared/chromosome_validation.py`. Internal imports use standard Python imports; no dynamic loading or sys.path modifications are needed.
+
+Run commands from the repository root:
+
+```powershell
+python -m step1_problem_representation.schedule_data
+python -m step2_fitness_function.fitness_function
+python -m unittest discover -s tests -p "test_*.py" -t . -v
+```
+
+Use module execution (`python -m`) rather than running nested files directly. See `step3_genetic_operators/REPORT.md` for integration guidance.
