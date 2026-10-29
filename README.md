@@ -157,4 +157,4 @@ python -m step2_fitness_function.fitness_function
 python -m unittest discover -s tests -p "test_*.py" -t . -v
 ```
 
-Use module execution (`python -m`) rather than running nested files directly. See `step3_genetic_operators/REPORT.md` for integration guidance.
+Use module execution (`python -m`) rather than running nested files directly. See `step3_genetic_operators/REPORT.md` for design decisions and `step3_genetic_operators/NEXT_STEPS.md` for integration guidance.
