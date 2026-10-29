@@ -1,24 +1,16 @@
 # Genetic Operators Development Report
 
-## Scope and Status
+## Scope and Responsibilities
 
-Tournament selection is implemented. Crossover, mutation, the complete GA, and experiments remain pending. All code, comments, docstrings, and this report are in English.
+Part 3 implements tournament parent selection, two crossover strategies, and swap mutation for the weekly study schedule GA. All operators are implemented and verified by 31 unittest test methods on Python 3.13. Part 4 remains responsible for the complete GA, generations, replacement, elitism, and history. Part 5 remains responsible for experiments and visualization. No full GA performance or optimality claim is made.
 
-## Shared Validation and Package Structure
+## Representation and Shared Validation
 
-`Shared/chromosome_validation.py` owns `validate_chromosome`. Its logic was extracted unchanged from Part 2. It returns None for a valid chromosome and raises ValueError for incorrect length, unknown genes, or incorrect task counts. Required counts are A=4, B=5, C=3, D=3, Free=5. Late schedules can still be valid.
+Chromosomes contain 20 one-hour slots: A=4, B=5, C=3, D=3, Free=5. Validity means correct length, allowed labels, and exact counts. Deadlines are evaluated through fitness; a late schedule can be valid.
 
-Parts 2 and 3 use:
+`Shared/chromosome_validation.py` owns the validator extracted from Part 2 without changing its rules. It returns None for valid input and raises ValueError otherwise. Both fitness and operators import it. Part 2 continues to expose the imported validator for compatibility.
 
-```python
-from Shared.chromosome_validation import validate_chromosome
-```
-
-Part 2 still exposes the imported validator for compatibility with existing callers. Task configuration remains in Part 1.
-
-### Package Names and Imports
-
-The Step folders were renamed to valid Python package names:
+The Step directories were renamed to valid Python package names:
 
 - step1_problem_representation
 - step2_fitness_function
@@ -26,61 +18,112 @@ The Step folders were renamed to valid Python package names:
 - step4_ga_implementation
 - step5_experiments_visualization
 
-Each contains an __init__.py package marker. Shared/__init__.py marks Shared as a regular package; tests/__init__.py supports test discovery. These files contain package docstrings and do not add paths to Python's search path.
-
-Internal dependencies now use normal imports. The validator imports settings from step1_problem_representation.schedule_data. Part 2 imports those settings and display/generation helpers directly. Part 3 imports the shared validator. All importlib loaders and sys.path modifications were removed from project Python files, including tests.
-
-Run from the repository root using module execution:
-
-```powershell
-python -m step1_problem_representation.schedule_data
-python -m step2_fitness_function.fitness_function
-python -m unittest discover -s tests -p "test_*.py" -t . -v
-```
-
-Running nested files directly by path is no longer the supported entry point. Future developers should use dotted package imports and python -m from the root. Editor launch configurations and external scripts using old folder paths must be updated. VS Code unittest settings use tests as the start directory and the repository root as the top-level directory.
+Each package has __init__.py. Shared/__init__.py marks Shared as a regular package, and tests/__init__.py supports test discovery. These markers do not add paths to Python's search path. Internal imports are standard dotted imports; there is no importlib loading or sys.path modification. Run module commands from the repository root rather than executing nested files by path.
 
 ## Interface Contracts
 
 ```python
 select_parent(population, fitness_function, random_number_generator, tournament_size=3)
+crossover(parent1, parent2, crossover_rate, random_number_generator,
+          strategy="count_preserving_crossfill")
+mutate(chromosome, mutation_rate, random_number_generator)
 ```
 
-The method validates every chromosome before sampling, including individuals outside the tournament. Empty populations and invalid tournament sizes raise ValueError. The size must be an integer from 1 through population size; booleans are rejected.
+Every returned chromosome is an independent list. Inputs are preserved, including when an operation is skipped. Gene values are immutable strings, so list copying is sufficient.
 
-Participants are sampled without replacement within a tournament. Only participants receive fitness evaluations. Larger scalar scores win, and ties are resolved randomly among the best participants. An independent list copy is returned. Separate calls may select the same individual.
+### Parent Selection
 
-Validating the full population on each call adds work proportional to population size and chromosome length. Any later validation-once optimization must deliberately revise or preserve this contract and its tests.
+Validate the entire population before sampling. Require a nonempty population and an integer tournament size from 1 through population size; boolean sizes are rejected. Sample participants without replacement within a tournament. Evaluate only participants, maximize scalar fitness, and break best-score ties randomly. Return a copy of the winner. Separate calls can choose the same parent.
 
-## Design Decisions
+The default size 3 is an initial configuration, not an experimentally established optimum. Smaller populations require an explicit smaller size. Full-population validation on every call adds work proportional to population size and chromosome length. A future optimization must deliberately preserve or revise this contract and tests.
 
-Tournament selection controls pressure through tournament size without depending on the large score-scale difference between late and on-time schedules. Random tie-breaking matters because the fitness ignores within-day order. These are design reasons, not proof of superiority over rank or roulette selection. The default size 3 is an experimental starting point.
+### Crossover
 
-Crossover and mutation will control their occurrence probabilities internally. Part 4 must not repeat those probability checks. Their implementations remain pending.
+Validate rate, strategy, and both parents before randomness, including at rate zero. Rates are finite real numbers in [0, 1]; booleans, strings, None, NaN, and infinities are rejected with ValueError. Unknown strategies raise ValueError.
+
+A zero rate returns copies without randomness. A rate of one always activates crossover without a probability draw. Intermediate rates activate when random() < crossover_rate. One probability decision applies to the pair. Sample two distinct boundaries from 0 through chromosome length and sort them. Segments are [start:end], with end exclusive. Both children share cuts and reverse parent roles. A full-length segment is allowed and returns parent-equivalent copies.
+
+- count_preserving_crossfill: preserve the selected parent's segment in place. Compute remaining gene counts. Traverse the other parent circularly from end and fill empty positions circularly from end, accepting a label only while its count is still needed. The helper builds one child.
+- two_point_repair: use one parent's segment and the other parent's outside positions. For each excess label, randomly sample only the necessary outside occurrences. Shuffle the missing-gene list and replace the selected positions. The copied segment is protected. Already-valid children require no repair randomness. The repair changes the minimum number of positions needed to restore counts and uses no fitness or deadline heuristic.
+
+### Mutation
+
+Validate the rate and chromosome even at zero rate. Rate rules match crossover. The rate is the probability of applying one swap to the entire chromosome, not a per-gene probability. Return a copy even when skipped. At rate one, always apply one swap; intermediate rates use one probability draw. Sample two distinct positions without replacement and swap their values.
+
+Equal-label swaps and different-label swaps within the same day are allowed. The former may leave the chromosome unchanged; the latter preserves the current fitness. No rejection sampling forces a different label, different day, or improved score.
+
+## Design Decisions and Course References
+
+Lecture 6, Genetic Algorithm, slide 2 distinguishes representation-dependent variation from representation-independent selection. Slides 18-21 discuss crossover bias and the need for problem-dependent comparisons. Our task-day assignments matter, while within-day order does not affect the current fitness.
+
+Lecture 4, Eight Queens, slide 8 presents cut and crossfill with one cut, a preserved prefix, and distinct values. count_preserving_crossfill is an adaptation: it uses two boundaries, an internal protected segment, circular filling, and repeated-label counts. It should not be described as the exact lecture operator.
+
+Lecture 8, Permutation Representation, slides 2 and 8-13 assume distinct objects for conventional permutation crossovers. Direct PMX and edge crossover do not fit repeated task labels without adaptation. Slides 3-7 describe permutation mutation, including swap; slides 3-4 support one whole-chromosome mutation decision and a swap.
+
+Lecture 9, Selection and Population Management, slides 15-16 describe tournament selection and the effects of size and replacement. Tournament selection avoids making selection pressure depend on the large magnitude difference between late and on-time fitness values.
+
+Lecture 12, Parameter Setting, slides 6-7 identifies operator choice as a symbolic parameter and rates/tournament size as numeric parameters. Slide 13 motivates multiple runs and quality, speed, success, and robustness measurements. The strategy argument supports that comparison; neither crossover has been established as superior.
+
+Source files: 4-EightQueens.pdf, 6-GA.pdf, 8-PermutationRep.pdf, 9-SelPop.pdf, and 12-ParameterSetting.pdf from the supplied CISC 851 lecture materials.
 
 ## TDD Development and Validation Results
 
-Tests preceded implementation of missing behavior. Tests for existing behavior passed without unnecessary source changes. The Shared extraction was a behavior-preserving refactoring protected by the suite.
+Tests were written and executed before implementing missing behavior. Initial failures included absent interfaces, missing explicit validation, first-winner tie handling, and unimplemented active crossover/mutation. Each was followed by the necessary implementation and a passing suite. Tests for behavior already implemented passed immediately; no artificial Red phase was introduced.
 
-The 10 test methods cover negative scores, independent copies, random ties, empty populations, noninteger sizes, out-of-range sizes, sampled-only selection, invalid chromosomes outside the tournament, integration with the real fitness and random.Random, and identical-seed reproduction. Some methods include multiple subtests.
+Current suite: 31 test methods, some with multiple subtests:
 
-After extraction, all 10 tests passed on Python 3.13. After package renaming, all 10 tests passed again and the Part 2 example ran through its documented module entry point. Its random score is not a benchmark.
+| Area | Methods | Coverage |
+|---|---:|---|
+| Selection | 10 | Negative fitness, copies, ties, invalid inputs, tournament membership, real fitness, seeded reproduction |
+| Crossover | 13 | Exact children for both strategies, protected segments, count repair, missing-label mixtures, no-repair cases, boundary and single-gene segments, rates, invalid inputs, seeded integration |
+| Mutation | 7 | Zero and unit rates, exact swapped positions, neutral swaps, invalid inputs, intermediate-rate boundaries, seeded validity and reproduction |
+| Full operator pipeline | 1 | Selection -> crossover -> mutation with both strategies, real fitness, input preservation, and seeded reproduction |
+
+Controlled mocks verify exact decisions without flaky statistical assertions. Seeded integration uses seeds 7, 42, and 851 for both crossover strategies. The full pipeline repeats ten parent-pair operations per configuration and compares two identically initialized runs. This is operator integration, not a replacement or generation-management implementation.
+
+Final verification: all 31 methods passed on Python 3.13. The suite was also rerun after final documentation/configuration cleanup. No commits were created during this work.
+
+## Integration Guidelines for Parts 4 and 5
+
+Use one generator per GA run:
+
+```python
+import random
+
+from step2_fitness_function.fitness_function import fitness_function
+from step3_genetic_operators.genetic_operators import select_parent, crossover, mutate
+
+random_number_generator = random.Random(851)
+parent1 = select_parent(population, fitness_function, random_number_generator)
+parent2 = select_parent(population, fitness_function, random_number_generator)
+child1, child2 = crossover(
+    parent1, parent2, 0.8, random_number_generator,
+    strategy="count_preserving_crossfill",
+)
+child1 = mutate(child1, 0.1, random_number_generator)
+child2 = mutate(child2, 0.1, random_number_generator)
+```
+
+This fragment assumes a valid population already exists; it is not a full GA. Rates 0.8 and 0.1 are illustrative, not tuned recommendations. Do not apply crossover/mutation probabilities again in the GA loop. Use scalar fitness, where larger negative scores are better. Do not assume zero is reachable. Catch ValueError at an application boundary only when a defined recovery or user-message policy exists.
+
+Part 1 still uses global random.shuffle and has not been changed to accept a generator. Passing the run's generator through create_population and create_chromosome remains a proposed integration change. Until then, seeding only operators does not reproduce initialization. The integration tests control initialization directly with their local generator.
+
+Record seeds, configuration, Python version, and code revision. Reproduction assumes compatible software, identical inputs, and the same sequence of random calls. Different crossover strategies consume random draws differently, so sharing a seed does not synchronize all later random choices across strategies.
+
+Part 5 should compare strategies using equivalent starting populations, fixed evaluation/generation budgets, several seeds, and fixed remaining parameters for the initial comparison. Report fitness distributions, on-time success, convergence, meaningful diversity, and repair effects. Report tuned parameter interactions if explored. Within-day permutations can inflate genotype diversity without changing schedule fitness. Instrumentation for repair metrics is not currently exposed by the operator interface and must be added separately if those metrics are collected.
+
+## Execution
 
 Run from the repository root:
 
 ```powershell
+python -m step1_problem_representation.schedule_data
+python -m step2_fitness_function.fitness_function
 python -B -m unittest discover -s tests -p "test_*.py" -t . -v
 ```
 
-## Integration Guidelines for Parts 4 and 5
+VS Code uses unittest discovery from tests, pattern test_*.py, and top-level directory '.'. Refresh the Testing panel after changing files. Old launch paths referencing folders with spaces must be updated.
 
-- Create one random.Random instance per GA run and pass it to operators. Record the seed, configuration, Python version, and code revision. Reproduction assumes compatible software and the same inputs and call sequence.
-- Part 1 still uses global random.shuffle. It has not been changed. Passing the shared generator to create_population and create_chromosome remains a proposed change. Seeding operators alone does not reproduce initial population generation.
-- Pass the scalar fitness_function callable, not the detailed evaluation dictionary. Larger negative scores are better. Do not assume fitness zero is reachable.
-- Supply an explicit smaller tournament size when population size is below 3.
-- Correct invalid inputs rather than silently swallowing ValueError. Catch exceptions at an application boundary only when a defined recovery or user-message policy exists.
-- Part 4 owns generations, replacement, elitism, and history. Part 5 should compare multiple seeds and examine fitness, deadline penalties, diversity, and convergence.
+## Limitations and Remaining Work
 
-## Limitations and Future Improvements
-
-No full GA experiments, optimality claim, or selection-method comparison has been completed. Within-day permutations may have equal fitness. Crossover and mutation still need their own brainstorm and TDD cycles. The report will be updated as development continues.
+The Part 3 operators are complete for the agreed scope. Parts 4 and 5 remain pending. No experiments establish superiority or global optimality. The representation and fitness do not model session continuity, task prerequisites, or within-day preferences. Neutral swaps, unchanged offspring, repeated parent selection, and full-length crossover segments are intentional. A future extension should change contracts and tests explicitly.
