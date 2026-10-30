@@ -1,45 +1,13 @@
-"""Evaluate weekly study schedules. Higher fitness values are better.
+"""Evaluate schedules. Run from the repository root with python -m step2_fitness_function.fitness_function."""
 
-Run this file directly to evaluate and display a random schedule.
-"""
-
-from collections import Counter
-import importlib.util
-from pathlib import Path
-
-_DATA_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "Step1_Problem & Representation"
-    / "schedule_data.py"
+from Shared.chromosome_validation import validate_chromosome
+from step1_problem_representation.schedule_data import (
+    DAYS, SLOTS_PER_DAY, TASKS, create_chromosome, display_schedule,
 )
-_spec = importlib.util.spec_from_file_location("schedule_data", _DATA_PATH)
-_schedule_data = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_schedule_data)
-
-DAYS = _schedule_data.DAYS
-SLOTS_PER_DAY = _schedule_data.SLOTS_PER_DAY
-TASKS = _schedule_data.TASKS
 
 DEADLINE_WEIGHT = 1000
 PRIORITY_WEIGHT = 1
 BALANCE_WEIGHT = 5
-
-
-def validate_chromosome(chromosome):
-    """Raise ValueError unless the schedule has exactly the required slots."""
-    total_slots = len(DAYS) * SLOTS_PER_DAY
-    expected = Counter({task_id: task["hours"] for task_id, task in TASKS.items()})
-    free_slots = total_slots - sum(expected.values())
-    if free_slots < 0:
-        raise ValueError("Tasks exceed available study time.")
-    expected["Free"] = free_slots
-
-    if len(chromosome) != total_slots:
-        raise ValueError(f"Chromosome must contain exactly {total_slots} slots.")
-    if any(not isinstance(gene, str) or gene not in expected for gene in chromosome):
-        raise ValueError("Chromosome contains an unknown task or invalid gene.")
-    if Counter(chromosome) != expected:
-        raise ValueError(f"Incorrect task counts; expected {dict(expected)}.")
 
 
 def evaluate_fitness(chromosome):
@@ -89,6 +57,6 @@ def fitness_function(chromosome):
 
 
 if __name__ == "__main__":
-    schedule = _schedule_data.create_chromosome()
-    _schedule_data.display_schedule(schedule)
+    schedule = create_chromosome()
+    display_schedule(schedule)
     print("Fitness evaluation:", evaluate_fitness(schedule))
