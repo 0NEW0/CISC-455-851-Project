@@ -119,15 +119,6 @@ fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty)
 
 ## 5. Remaining Project Components
 
-### Part 3 — Genetic Operators
-- Implement selection, crossover, and mutation.
-- Maintain valid chromosome representations.
-
-### Part 4 — GA Implementation
-- Combine the previous components into a complete Genetic Algorithm.
-- Run the algorithm for approximately 100 generations.
-- Record the best fitness value for each generation.
-
 ### Part 5 — Experiments & Visualization
 - Test the completed algorithm.
 - Plot Generation vs. Best Fitness.
