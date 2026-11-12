@@ -140,8 +140,8 @@ fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty)
 |---|---|---|
 | 1 | Problem & Representation | Completed |
 | 2 | Fitness Function | Completed |
-| 3 | Genetic Operators | To Do |
-| 4 | GA Implementation | To Do |
+| 3 | Genetic Operators | Completed |
+| 4 | GA Implementation | Completed |
 | 5 | Experiments & Visualization | To Do |
 
 
