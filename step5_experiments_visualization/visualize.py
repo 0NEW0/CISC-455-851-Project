@@ -112,6 +112,7 @@ def crossover_test(generations=20, trials=20):
         plot_data(description, [x / generations for x in best_fitness])
         display_schedule(best_schedule)
         crossover_rate /= 2
+    print("Crossover Rate Testing Complete")
 
 def elite_test(generations=20, trials=20):
     print("Testing Elite Count...")
@@ -134,6 +135,7 @@ def elite_test(generations=20, trials=20):
         plot_data(description, [x / generations for x in best_fitness])
         display_schedule(best_schedule)
         elite_count = 1 if elite_count == 0 else elite_count*2
+    print("Elite Count Testing Complete")
 
 def main():
     robustness_test()
