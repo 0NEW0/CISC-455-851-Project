@@ -29,4 +29,3 @@ Tue : ['B', 'Free', 'D', 'A']
 Wed : ['Free', 'A', 'A', 'A']
 Thu : ['C', 'Free', 'C', 'C']
 Fri : ['D', 'Free', 'Free', 'D']
-Elite Count Testing Complete

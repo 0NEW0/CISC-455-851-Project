@@ -1,28 +1,28 @@
 Testing Population Size...
 Population size 5
-Mon : ['B', 'A', 'D', 'A']
-Tue : ['B', 'B', 'Free', 'A']
-Wed : ['B', 'C', 'A', 'Free']
-Thu : ['C', 'Free', 'B', 'C']
-Fri : ['Free', 'D', 'D', 'Free']
-Population size 10
-Mon : ['B', 'B', 'B', 'C']
-Tue : ['A', 'B', 'Free', 'D']
-Wed : ['A', 'Free', 'A', 'A']
-Thu : ['Free', 'C', 'B', 'C']
-Fri : ['D', 'Free', 'Free', 'D']
-Population size 20
-Mon : ['B', 'B', 'B', 'D']
+Mon : ['B', 'B', 'D', 'B']
 Tue : ['B', 'B', 'Free', 'A']
 Wed : ['A', 'A', 'A', 'Free']
 Thu : ['C', 'Free', 'C', 'C']
-Fri : ['D', 'D', 'Free', 'Free']
-Population size 40
-Mon : ['B', 'B', 'B', 'B']
-Tue : ['Free', 'D', 'A', 'B']
-Wed : ['A', 'A', 'Free', 'A']
-Thu : ['C', 'C', 'Free', 'C']
 Fri : ['Free', 'D', 'D', 'Free']
+Population size 10
+Mon : ['D', 'B', 'B', 'B']
+Tue : ['A', 'B', 'B', 'Free']
+Wed : ['A', 'Free', 'A', 'A']
+Thu : ['C', 'C', 'Free', 'C']
+Fri : ['D', 'Free', 'Free', 'D']
+Population size 20
+Mon : ['B', 'D', 'B', 'B']
+Tue : ['B', 'A', 'B', 'Free']
+Wed : ['A', 'Free', 'A', 'A']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['Free', 'D', 'Free', 'D']
+Population size 40
+Mon : ['B', 'B', 'D', 'B']
+Tue : ['Free', 'A', 'B', 'B']
+Wed : ['Free', 'A', 'A', 'A']
+Thu : ['Free', 'C', 'C', 'C']
+Fri : ['Free', 'D', 'Free', 'D']
 Population size 80
 Mon : ['D', 'B', 'B', 'B']
 Tue : ['Free', 'B', 'A', 'B']

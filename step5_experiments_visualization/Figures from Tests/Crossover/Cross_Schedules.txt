@@ -29,4 +29,3 @@ Tue : ['B', 'A', 'Free', 'B']
 Wed : ['A', 'A', 'A', 'Free']
 Thu : ['Free', 'C', 'C', 'C']
 Fri : ['Free', 'D', 'D', 'Free']
-Crossover Rate Testing Complete
