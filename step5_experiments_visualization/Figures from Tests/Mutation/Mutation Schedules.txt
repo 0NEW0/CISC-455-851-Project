@@ -1,0 +1,32 @@
+Testing Mutation Rate...
+Mutation Rate 1
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'B', 'B', 'A']
+Wed : ['A', 'Free', 'A', 'A']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['Free', 'D', 'D', 'Free']
+Mutation Rate 0.5
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'A', 'B', 'B']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'C', 'Free', 'C']
+Fri : ['Free', 'D', 'Free', 'D']
+Mutation Rate 0.25
+Mon : ['D', 'B', 'B', 'B']
+Tue : ['Free', 'B', 'B', 'A']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['Free', 'Free', 'D', 'D']
+Mutation Rate 0.125
+Mon : ['B', 'D', 'B', 'B']
+Tue : ['Free', 'B', 'B', 'A']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['Free', 'Free', 'D', 'D']
+Mutation Rate 0.0625
+Mon : ['B', 'B', 'B', 'B']
+Tue : ['D', 'B', 'Free', 'A']
+Wed : ['A', 'A', 'A', 'Free']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['D', 'Free', 'D', 'Free']
+Mutation Rate Testing Complete
