@@ -45,7 +45,7 @@ def robustness_test(generations=20):
             display_schedule(result["best_chromosome"])
         print("Robustness Testing Complete")
 
-def population_test(generations=20, trials=20):
+def population_test(generations=100, trials=20):
     print("Testing Population Size...")
     population_size = 5
     for _ in range(5):
@@ -58,7 +58,8 @@ def population_test(generations=20, trials=20):
         best_fitness = result["best_history"]
         for seed in range(1, trials):
             result = ga.run_ga(population_size=population_size, generations=generations, seed=seed)
-            best_schedule += result["best_chromosome"]
+            for i in range(len(best_fitness)):
+                best_fitness[i] += result["best_history"][i]
             if result["best_fitness"] > best_schedule_fitness:
                 best_schedule = result["best_chromosome"]
                 best_schedule_fitness = result["best_fitness"]
@@ -81,7 +82,8 @@ def mutation_test(generations=20, trials=20):
         best_fitness = result["best_history"]
         for seed in range(1, trials):
             result = ga.run_ga(mutation_rate=mutation_rate, generations=generations, seed=seed)
-            best_schedule += result["best_chromosome"]
+            for i in range(len(best_fitness)):
+                best_fitness[i] += result["best_history"][i]
             if result["best_fitness"] > best_schedule_fitness:
                 best_schedule = result["best_chromosome"]
                 best_schedule_fitness = result["best_fitness"]
@@ -104,7 +106,8 @@ def crossover_test(generations=20, trials=20):
         best_fitness = result["best_history"]
         for seed in range(1, trials):
             result = ga.run_ga(crossover_rate=crossover_rate, generations=generations, seed=seed)
-            best_schedule += result["best_chromosome"]
+            for i in range(len(best_fitness)):
+                best_fitness[i] += result["best_history"][i]
             if result["best_fitness"] > best_schedule_fitness:
                 best_schedule = result["best_chromosome"]
                 best_schedule_fitness = result["best_fitness"]
@@ -112,7 +115,6 @@ def crossover_test(generations=20, trials=20):
         plot_data(description, [x / generations for x in best_fitness])
         display_schedule(best_schedule)
         crossover_rate /= 2
-    print("Crossover Rate Testing Complete")
 
 def elite_test(generations=20, trials=20):
     print("Testing Elite Count...")
@@ -127,7 +129,8 @@ def elite_test(generations=20, trials=20):
         best_fitness = result["best_history"]
         for seed in range(1, trials):
             result = ga.run_ga(elite_count=elite_count, generations=generations, seed=seed)
-            best_schedule += result["best_chromosome"]
+            for i in range(len(best_fitness)):
+                best_fitness[i] += result["best_history"][i]
             if result["best_fitness"] > best_schedule_fitness:
                 best_schedule = result["best_chromosome"]
                 best_schedule_fitness = result["best_fitness"]
@@ -135,7 +138,6 @@ def elite_test(generations=20, trials=20):
         plot_data(description, [x / generations for x in best_fitness])
         display_schedule(best_schedule)
         elite_count = 1 if elite_count == 0 else elite_count*2
-    print("Elite Count Testing Complete")
 
 def main():
     robustness_test()
