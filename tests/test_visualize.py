@@ -17,6 +17,10 @@ class TrialAggregationTests(unittest.TestCase):
                 "best_history": histories[seed],
                 "best_fitness": histories[seed][-1],
                 "best_chromosome": schedules[seed],
+                "best_generation": 2,
+                "parameters": {"seed": seed, "unavailable_slots": ((0, 0), (1, 1))},
+                "best_breakdown": {"deadline_penalty": 0, "unavailable_slot_conflicts": 0,
+                                   "short_sessions": 0, "priority_penalty": 66, "balance_penalty": 0},
             }
 
         for experiment in (visualize.population_test, visualize.mutation_test,
@@ -26,7 +30,7 @@ class TrialAggregationTests(unittest.TestCase):
                 patch.object(visualize.ga, "run_ga", side_effect=run_trial) as run_ga,
                 patch.object(visualize, "plot_data") as plot,
                 patch.object(visualize, "display_schedule") as display,
-                redirect_stdout(StringIO()),
+                redirect_stdout(StringIO()) as log,
             ):
                 experiment(generations=2, trials=3)
 
@@ -34,6 +38,7 @@ class TrialAggregationTests(unittest.TestCase):
                 self.assertEqual([c.args[1] for c in plot.call_args_list], [[-100, -85, -73]] * 5)
                 self.assertEqual([c.args[0] for c in display.call_args_list], [schedules[2]] * 5)
                 self.assertEqual(histories[1], [-90, -81, -78])
+                self.assertIn("All three requirements met: 3/3", log.getvalue())
 
 
 if __name__ == "__main__":

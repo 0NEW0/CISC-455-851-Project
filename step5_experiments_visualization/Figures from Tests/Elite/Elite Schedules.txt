@@ -1,31 +1,77 @@
-Testing Elite Count...
+Elite Count: seeds 1–20, 20 generations per run
+
 Elite Count 0
+All deadlines met: 20/20
+No unavailable-slot conflicts: 19/20
+No short Project sessions: 16/20
+All three requirements met: 15/20
+Mean final best fitness: -132.25
+Best schedule: seed 7, generation 17, fitness -69
+Unavailable slots: Tue slot 4, Wed slot 1
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
 Mon : ['B', 'B', 'B', 'D']
-Tue : ['B', 'A', 'Free', 'B']
-Wed : ['A', 'A', 'A', 'Free']
-Thu : ['C', 'Free', 'C', 'C']
-Fri : ['Free', 'Free', 'D', 'D']
-Elite Count 1
-Mon : ['B', 'B', 'B', 'B']
-Tue : ['Free', 'A', 'D', 'B']
-Wed : ['A', 'A', 'A', 'Free']
-Thu : ['C', 'C', 'Free', 'C']
-Fri : ['Free', 'D', 'Free', 'D']
-Elite Count 2
-Mon : ['B', 'B', 'D', 'B']
-Tue : ['Free', 'A', 'B', 'B']
-Wed : ['A', 'A', 'A', 'Free']
-Thu : ['Free', 'C', 'C', 'C']
-Fri : ['Free', 'D', 'D', 'Free']
-Elite Count 4
-Mon : ['B', 'D', 'B', 'B']
-Tue : ['B', 'A', 'B', 'Free']
-Wed : ['A', 'A', 'Free', 'A']
-Thu : ['C', 'Free', 'C', 'C']
-Fri : ['Free', 'Free', 'D', 'D']
-Elite Count 8
-Mon : ['B', 'B', 'B', 'B']
-Tue : ['B', 'Free', 'D', 'A']
+Tue : ['C', 'C', 'A', 'Free']
 Wed : ['Free', 'A', 'A', 'A']
+Thu : ['Free', 'B', 'B', 'C']
+Fri : ['Free', 'D', 'D', 'Free']
+
+Elite Count 1
+All deadlines met: 20/20
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -76.90
+Best schedule: seed 9, generation 18, fitness -70
+Unavailable slots: Wed slot 3, Thu slot 2
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=60, balance=2
+Mon : ['B', 'B', 'B', 'A']
+Tue : ['B', 'B', 'A', 'Free']
+Wed : ['C', 'A', 'Free', 'A']
+Thu : ['C', 'Free', 'C', 'D']
+Fri : ['D', 'D', 'Free', 'Free']
+
+Elite Count 2
+All deadlines met: 20/20
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 18/20
+All three requirements met: 18/20
+Mean final best fitness: -78.95
+Best schedule: seed 13, generation 16, fitness -69
+Unavailable slots: Wed slot 2, Fri slot 2
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['D', 'B', 'B', 'B']
+Tue : ['Free', 'A', 'C', 'C']
+Wed : ['A', 'Free', 'A', 'A']
+Thu : ['B', 'B', 'C', 'Free']
+Fri : ['Free', 'Free', 'D', 'D']
+
+Elite Count 4
+All deadlines met: 20/20
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -76.35
+Best schedule: seed 4, generation 20, fitness -69
+Unavailable slots: Tue slot 1, Wed slot 4
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'C', 'C', 'A']
+Wed : ['A', 'A', 'A', 'Free']
+Thu : ['C', 'B', 'B', 'Free']
+Fri : ['D', 'Free', 'Free', 'D']
+
+Elite Count 8
+All deadlines met: 20/20
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -78.20
+Best schedule: seed 9, generation 16, fitness -69
+Unavailable slots: Wed slot 3, Thu slot 2
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['A', 'B', 'B', 'B']
+Tue : ['A', 'B', 'B', 'Free']
+Wed : ['D', 'A', 'Free', 'A']
 Thu : ['C', 'Free', 'C', 'C']
 Fri : ['D', 'Free', 'Free', 'D']
+

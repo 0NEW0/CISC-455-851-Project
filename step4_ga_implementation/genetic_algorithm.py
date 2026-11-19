@@ -6,8 +6,11 @@ Run from the repository root with:
 
 import random
 import sys
+from functools import partial
 
-from step1_problem_representation.schedule_data import create_population, display_schedule
+from step1_problem_representation.schedule_data import (
+    DAYS, choose_unavailable_slots, create_population, display_schedule,
+)
 from step2_fitness_function.fitness_function import evaluate_fitness, fitness_function
 from step3_genetic_operators.genetic_operators import crossover, mutate, select_parent
 
@@ -48,12 +51,12 @@ SURVIVAL = "elitist"
 
 
 def _make_offspring(population, count, crossover_rate, mutation_rate,
-                    tournament_size, crossover_strategy, rng):
+                    tournament_size, crossover_strategy, rng, score):
     """Create `count` children: tournament selection -> crossover -> mutation."""
     offspring = []
     while len(offspring) < count:
-        parent1 = select_parent(population, fitness_function, rng, tournament_size)
-        parent2 = select_parent(population, fitness_function, rng, tournament_size)
+        parent1 = select_parent(population, score, rng, tournament_size)
+        parent2 = select_parent(population, score, rng, tournament_size)
         child1, child2 = crossover(
             parent1, parent2, crossover_rate, rng, crossover_strategy
         )
@@ -63,10 +66,10 @@ def _make_offspring(population, count, crossover_rate, mutation_rate,
     return offspring
 
 
-def _rank(chromosomes):
+def _rank(chromosomes, score):
     """Return (fitness, chromosome) pairs sorted from best to worst."""
     return sorted(
-        ((fitness_function(c), c) for c in chromosomes),
+        ((score(c), c) for c in chromosomes),
         key=lambda pair: pair[0],
         reverse=True,
     )
@@ -82,6 +85,8 @@ def run_ga(
     crossover_strategy=CROSSOVER_STRATEGY,
     survival=SURVIVAL,
     seed=None,
+    *,
+    use_constraints=True,
 ):
     """Run the GA and return a dictionary of results.
 
@@ -90,6 +95,9 @@ def run_ga(
     children made by tournament selection -> crossover -> swap mutation. The
     population size stays constant. See SURVIVAL_SCHEMES for the alternatives.
     elite_count is only used by the "elitist" scheme.
+
+    The default scorer includes unavailable slots and minimum session lengths.
+    Set use_constraints=False to reproduce the baseline scoring.
 
     Reproducibility: if seed is given, both the operators' random generator and
     Python's global random module (used by Part 1 to build the initial
@@ -103,7 +111,8 @@ def run_ga(
         best_history         best fitness per generation, index 0 = initial
                              population (length generations + 1)
         average_history      average fitness per generation, same indexing
-        parameters           settings used, including seed and Python version
+        parameters           settings used, including seed and Python version,
+                             plus the two unavailable slots drawn for the run
     """
     if not isinstance(population_size, int) or population_size < 2:
         raise ValueError("Population size must be an integer of at least 2.")
@@ -116,19 +125,23 @@ def run_ga(
     if survival not in SURVIVAL_SCHEMES:
         raise ValueError(f"Survival must be one of {SURVIVAL_SCHEMES}.")
 
+    # Draw once from a separate stream so the slots stay fixed across generations.
+    unavailable_slots = choose_unavailable_slots(seed)
+    scored_slots = unavailable_slots if use_constraints else None
+    score = partial(fitness_function, unavailable_slots=scored_slots) if use_constraints else fitness_function
     rng = random.Random(seed)
     if seed is not None:
         random.seed(seed)  # Part 1 uses the global random module
 
     offspring_settings = (crossover_rate, mutation_rate, tournament_size,
-                          crossover_strategy, rng)
+                          crossover_strategy, rng, score)
     population = create_population(population_size)
     best_chromosome, best_fitness, best_generation = None, float("-inf"), 0
     best_history, average_history = [], []
 
     for generation in range(generations + 1):
         # Evaluate each schedule once per generation.
-        scored = _rank(population)
+        scored = _rank(population, score)
         gen_best_fitness, gen_best = scored[0]
         best_history.append(gen_best_fitness)
         average_history.append(sum(s for s, _ in scored) / len(scored))
@@ -149,7 +162,7 @@ def run_ga(
         elif survival == "mu_plus_lambda":
             children = _make_offspring(population, population_size, *offspring_settings)
             pool = sorted(
-                scored + [(fitness_function(c), c) for c in children],
+                scored + [(score(c), c) for c in children],
                 key=lambda pair: pair[0],
                 reverse=True,
             )
@@ -161,7 +174,7 @@ def run_ga(
                     [c for _, c in ranked], 2, *offspring_settings
                 )
                 ranked = sorted(
-                    ranked[:-2] + [(fitness_function(k), k) for k in kids],
+                    ranked[:-2] + [(score(k), k) for k in kids],
                     key=lambda pair: pair[0],
                     reverse=True,
                 )
@@ -170,7 +183,7 @@ def run_ga(
     return {
         "best_chromosome": best_chromosome,
         "best_fitness": best_fitness,
-        "best_breakdown": evaluate_fitness(best_chromosome),
+        "best_breakdown": evaluate_fitness(best_chromosome, unavailable_slots=scored_slots),
         "best_generation": best_generation,
         "best_history": best_history,
         "average_history": average_history,
@@ -184,14 +197,18 @@ def run_ga(
             "crossover_strategy": crossover_strategy,
             "survival": survival,
             "seed": seed,
+            "use_constraints": use_constraints,
+            "unavailable_slots": unavailable_slots,
             "python_version": sys.version.split()[0],
         },
     }
 
 
 if __name__ == "__main__":
-    result = run_ga(seed=42)
+    result = run_ga()
     print("Parameters:", result["parameters"])
+    for day, slot in result["parameters"]["unavailable_slots"]:
+        print(f"Unavailable slot: {DAYS[day]}, slot {slot + 1}")
     print("Best fitness per generation (first 5):", result["best_history"][:5])
     print("Best fitness per generation (last 5):", result["best_history"][-5:])
     print("Best found in generation:", result["best_generation"])

@@ -6,9 +6,9 @@
 
 The goal of this project is to optimize a student's weekly study schedule using a **Genetic Algorithm (GA)**.
 
-The algorithm aims to create a study schedule that considers task priorities, deadlines, and workload balance.
+The algorithm scores schedules by deadlines, task priorities, and daily workload. It also penalizes occupied unavailable slots and short Project sessions.
 
-The schedule covers Monday to Friday, with 4 one-hour study slots per day, giving a total of **20 available slots per week**.
+The schedule covers Monday to Friday, with four one-hour slots per day and **20 slots per week**. Each run marks two slots on different weekdays as unavailable.
 
 ## 2. Problem Definition
 
@@ -25,9 +25,10 @@ We use four sample tasks with different priorities, deadlines, and required stud
 - Available days: Monday to Friday
 - Study slots per day: 4
 - Duration per slot: 1 hour
-- Total available time: 20 hours
+- Total scheduled time: 20 hours
 - Total required study time: 15 hours
-- Remaining free time: 5 hours
+- Free slots: 5, of which 2 must cover the unavailable slots to avoid a penalty
+- Project sessions: at least 2 consecutive hours on the same day
 
 Deadlines are represented using numbers from 0 (Monday) to 4 (Friday). Each task should be completed by the end of its deadline day.
 
@@ -51,6 +52,7 @@ The following components have been implemented:
 ### 4.1 Sample Task Data
 - Defined available study days and time slots.
 - Created four sample tasks with required hours, priorities, and deadlines.
+- Draws two unavailable slots on different weekdays once per GA run. A fixed seed reproduces the draw.
 
 ### 4.2 Chromosome Generation
 **Function:** `create_chromosome()`
@@ -73,7 +75,7 @@ The following components have been implemented:
 - Converts a chromosome into a readable weekly schedule.
 - Displays the four study slots for each day from Monday to Friday.
 
-**Note:** Initial schedules are randomly generated and may miss deadlines. The genetic algorithm uses the fitness function to evaluate and improve them.
+**Note:** Randomly generated schedules satisfy the task-hour counts. The fitness function then checks deadlines, availability, session length, and the other scoring criteria.
 
 ### 4.5 Chromosome Validation
 **File:** [`Shared/chromosome_validation.py`](Shared/chromosome_validation.py)
@@ -86,42 +88,47 @@ The following components have been implemented:
 - Raises a `ValueError` for invalid chromosomes so missing task hours cannot improve fitness.
 
 ### 4.6 Fitness Evaluation
-**Function:** `evaluate_fitness(chromosome)`
+**Function:** `evaluate_fitness(chromosome, unavailable_slots=slots)`
 
-- Evaluates a schedule using three penalty components:
+- Use the two `(day, slot)` pairs for the current run. Both indexes start at zero.
+- Evaluates a schedule using five penalty components:
   - **Deadline penalty:** Sums the days late for each scheduled task hour. Study on the deadline day is allowed.
   - **Priority penalty:** Sums task priority multiplied by the scheduled day index (Monday = 0). This encourages higher-priority work earlier in the week.
   - **Balance penalty:** Sums squared differences between daily study hours and the average of 3 hours per day.
+  - **Unavailable-slot conflicts:** Counts unavailable slots assigned to any task.
+  - **Short sessions:** Counts Project sessions shorter than two consecutive hours on the same day.
 - Combines the penalties using the following formula:
 
 ```text
-fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty)
+fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty
+            + 1000 * unavailable_slot_conflicts + 20 * short_sessions)
 ```
 
-- Returns the fitness value and all three unweighted penalty components in a dictionary.
+- Returns the fitness value and all five unweighted penalty components in a dictionary.
 - Higher fitness values indicate better schedules; scores are nonpositive.
-- With the current task data, priority penalty is at most 140 and balance penalty is at most 12. The deadline weight of 1000 ensures every on-time schedule scores higher than every late schedule.
+- With the current task data, a schedule with zero deadline and unavailable-slot penalties scores higher than one with either violation. A short Project session carries a smaller penalty.
 
 **Note:** The priority rule assumes important tasks should be scheduled earlier. Weights should be reassessed if task data or scoring preferences change.
 
 ### 4.7 GA Fitness Interface and Example
-**Function:** `fitness_function(chromosome)`
+**Function:** `fitness_function(chromosome, unavailable_slots=slots)`
 
 - Returns only the scalar fitness value for use by the Genetic Algorithm.
 - Supports selection methods based on score comparisons, such as tournament or rank selection. Roulette-wheel selection requires a suitable score transformation to positive weights.
-- Running `python -m step2_fitness_function.fitness_function` from the repository root displays a random weekly schedule and its fitness breakdown.
+- Running `python -m step2_fitness_function.fitness_function` from the repository root displays the sampled unavailable slots, a random weekly schedule, and its fitness breakdown.
 
 ### 4.8 Fitness Verification
 - Checked a manually calculated schedule score and workload balance penalties.
 - Checked deadline-day acceptance and penalties for task hours scheduled one or two days late.
 - Checked rejection of incorrect lengths, unknown genes, and incorrect task counts.
 - Evaluated 1,000 random schedules generated by Part 1 and checked consistency between the detailed evaluation and scalar fitness interface.
+- Verified that the new penalties change which schedule the GA prefers and that a fixed seed reproduces the unavailable slots and results.
 
 ## 5. Genetic Algorithm and Experiments (Parts 3–5)
 
 - **Part 3: Genetic operators.** Tournament selection chooses parents. Two crossover strategies and swap mutation produce offspring while preserving task hours. See the [operator design report](step3_genetic_operators/REPORT.md).
 - **Part 4: GA implementation.** `run_ga()` defaults to a population of 50, 100 generations, 80% crossover, 30% mutation, and 2 elites. It returns the best schedule and each generation's best and average fitness. The initial population is generation 0. See the [GA and survival strategies report](step4_ga_implementation/README_step4.md).
-- **Part 5: Experiments and visualization.** `visualize.py` runs five experiments: random seeds, population size, mutation rate, crossover rate, and elite count. The population-size sweep runs for 100 generations; the other experiments run for 20. See the [experiment report](step5_experiments_visualization/README_part5.md).
+- **Part 5: Experiments and visualization.** `visualize.py` runs five experiments with the updated fitness function: random seeds, population size, mutation rate, crossover rate, and elite count. The population-size sweep runs for 100 generations; the other experiments run for 20. See the [experiment report](step5_experiments_visualization/README_part5.md).
 
 **Experiment method:** Each parameter setting uses the same 20 distinct seeds. The script averages the trials' best fitness separately for each generation, starting at generation 0, and prints the highest-scoring individual schedule. The five robustness plots show individual seeds.
 
@@ -154,3 +161,5 @@ If the environment already exists, you can run the tests or visualization with i
 ```
 
 Use `python -m` from the repository root so Python can find sibling packages such as `Shared`. Close each plot window to continue to the next figure. The automated tests cover the genetic operators, the GA, and trial aggregation. Run the visualization separately to view the plots.
+
+To refresh the five sets of PNGs and schedule logs without opening plot windows, run `uv run python -m step5_experiments_visualization.visualize --save`.

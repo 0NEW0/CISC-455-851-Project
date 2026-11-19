@@ -3,7 +3,7 @@
 Run from the repository root with:
     python -m step4_ga_implementation.compare_survival
 
-All other settings stay at their defaults; only `survival` and the seed change.
+Uses the original fitness function. Only `survival` and the seed change.
 For every scheme it reports:
   - how many runs reached the optimal fitness and how fast (in generations)
   - the best and mean fitness in the last generation
@@ -44,7 +44,7 @@ def run_scheme(scheme):
         for seed in SEEDS:
             calls[0] = 0
             start = time.perf_counter()
-            results.append(ga.run_ga(seed=seed, survival=scheme))
+            results.append(ga.run_ga(seed=seed, survival=scheme, use_constraints=False))
             times.append(time.perf_counter() - start)
             evaluations.append(calls[0])
     finally:

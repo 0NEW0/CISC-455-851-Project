@@ -1,6 +1,6 @@
 import random
 
-# Available study days and number of one-hour slots per day
+# Study days and number of one-hour slots per day
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 SLOTS_PER_DAY = 4  # 20 study slots per week
 
@@ -9,12 +9,13 @@ SLOTS_PER_DAY = 4  # 20 study slots per week
 # priority: 3 = High, 2 = Medium, 1 = Low
 # deadline: 0 = Monday, 1 = Tuesday, ..., 4 = Friday
 #           Each task must be completed by the end of its deadline day
+# min_session_hours: Minimum consecutive hours in a same-day session (default 1)
 
 TASKS = {
     "A": {"name": "Assignment", "hours": 4,
           "priority": 1, "deadline": 2},
     "B": {"name": "Project", "hours": 5,
-          "priority": 3, "deadline": 3},
+          "priority": 3, "deadline": 3, "min_session_hours": 2},
     "C": {"name": "Essay", "hours": 3,
           "priority": 2, "deadline": 3},
     "D": {"name": "Exam Review", "hours": 3,
@@ -23,6 +24,13 @@ TASKS = {
 
 # Total required study time: 15 hours
 # Remaining available time: 5 free slots
+
+
+def choose_unavailable_slots(seed=None):
+    """Choose two unavailable slots on different days as zero-based pairs."""
+    rng = random.Random(seed)
+    days = sorted(rng.sample(range(len(DAYS)), 2))
+    return tuple((day, rng.randrange(SLOTS_PER_DAY)) for day in days)
 
 
 def create_chromosome():
@@ -65,6 +73,8 @@ def create_population(size):
 
 
 if __name__ == "__main__":
+    for day, slot in choose_unavailable_slots():
+        print(f"Unavailable slot: {DAYS[day]}, slot {slot + 1}")
     chromosome = create_chromosome()
     display_schedule(chromosome)
     
