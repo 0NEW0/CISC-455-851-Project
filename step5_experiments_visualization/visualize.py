@@ -53,7 +53,7 @@ def print_result(result):
     print()
 
 
-def robustness_test(generations=20, *, output_dir=None):
+def robustness_test(generations=100, *, output_dir=None):
     print(f"Robustness: five individual seeds, {generations} generations\n")
     for seed in range(1, 6):
         result = ga.run_ga(seed=seed, generations=generations)
@@ -91,17 +91,17 @@ def population_test(generations=100, trials=20, *, output_dir=None):
     _parameter_test("Population Size", "population_size", values, names, generations, trials, output_dir)
 
 
-def mutation_test(generations=20, trials=20, *, output_dir=None):
+def mutation_test(generations=100, trials=20, *, output_dir=None):
     names = [f"Mut_{rate * 100:g}.png" for rate in RATES]
     _parameter_test("Mutation Rate", "mutation_rate", RATES, names, generations, trials, output_dir)
 
 
-def crossover_test(generations=20, trials=20, *, output_dir=None):
+def crossover_test(generations=100, trials=20, *, output_dir=None):
     names = [f"Cross_{rate * 100:g}.png" for rate in RATES]
     _parameter_test("Crossover Rate", "crossover_rate", RATES, names, generations, trials, output_dir)
 
 
-def elite_test(generations=20, trials=20, *, output_dir=None):
+def elite_test(generations=100, trials=20, *, output_dir=None):
     values = (0, 1, 2, 4, 8)
     names = ["elite_0.png", *(f"Elite_{count}.png" for count in values[1:])]
     _parameter_test("Elite Count", "elite_count", values, names, generations, trials, output_dir)
