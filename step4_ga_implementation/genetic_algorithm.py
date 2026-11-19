@@ -37,7 +37,7 @@ TOURNAMENT_SIZE = 3
 # unchanged, so the best fitness can never get worse between generations.
 ELITE_COUNT = 2
 # Step 3's default strategy; both strategies always keep task counts valid.
-CROSSOVER_STRATEGY = "count_preserving_crossfill"
+CROSSOVER_STRATEGY = "two_point_repair"
 
 # How the next population is chosen ("survival scheme"):
 #   elitist          keep the best ELITE_COUNT, fill the rest with children (default)
