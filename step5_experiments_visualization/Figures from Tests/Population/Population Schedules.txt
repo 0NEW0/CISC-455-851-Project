@@ -1,77 +1,76 @@
 Population Size: seeds 1–20, 100 generations per run
 
 Population Size 5
-All deadlines met: 13/20
-No unavailable-slot conflicts: 16/20
-No short Project sessions: 7/20
-All three requirements met: 4/20
-Mean final best fitness: -645.80
-Best schedule: seed 10, generation 66, fitness -71
-Unavailable slots: Mon slot 4, Fri slot 4
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=61, balance=2
-Mon : ['B', 'B', 'B', 'Free']
-Tue : ['B', 'B', 'C', 'Free']
-Wed : ['A', 'A', 'A', 'A']
-Thu : ['D', 'C', 'Free', 'C']
-Fri : ['D', 'D', 'Free', 'Free']
+All deadlines met: 17/20
+No unavailable-slot conflicts: 19/20
+No short Project sessions: 11/20
+All three requirements met: 9/20
+Mean final best fitness: -347.65
+Best schedule: seed 4, generation 97, fitness -70
+Unavailable slots: Tue slot 1, Wed slot 4
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=60, balance=2
+Mon : ['B', 'B', 'B', 'A']
+Tue : ['Free', 'A', 'B', 'B']
+Wed : ['A', 'C', 'A', 'Free']
+Thu : ['C', 'Free', 'C', 'D']
+Fri : ['D', 'Free', 'Free', 'D']
 
 Population Size 10
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 15/20
-All three requirements met: 15/20
-Mean final best fitness: -78.95
-Best schedule: seed 5, generation 62, fitness -69
+No short Project sessions: 17/20
+All three requirements met: 17/20
+Mean final best fitness: -74.55
+Best schedule: seed 5, generation 86, fitness -65
 Unavailable slots: Wed slot 3, Fri slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
 Mon : ['B', 'B', 'B', 'D']
-Tue : ['A', 'C', 'C', 'Free']
+Tue : ['A', 'B', 'B', 'Free']
 Wed : ['A', 'A', 'Free', 'A']
-Thu : ['Free', 'C', 'B', 'B']
-Fri : ['Free', 'D', 'Free', 'D']
+Thu : ['Free', 'C', 'C', 'C']
+Fri : ['Free', 'Free', 'D', 'D']
 
 Population Size 20
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 20/20
-All three requirements met: 20/20
-Mean final best fitness: -70.60
-Best schedule: seed 9, generation 38, fitness -65
-Unavailable slots: Wed slot 3, Thu slot 2
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -71.80
+Best schedule: seed 5, generation 53, fitness -65
+Unavailable slots: Wed slot 3, Fri slot 1
 Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
-Mon : ['D', 'B', 'B', 'B']
+Mon : ['B', 'B', 'B', 'D']
 Tue : ['B', 'B', 'Free', 'A']
 Wed : ['A', 'A', 'Free', 'A']
-Thu : ['C', 'Free', 'C', 'C']
-Fri : ['D', 'Free', 'Free', 'D']
+Thu : ['Free', 'C', 'C', 'C']
+Fri : ['Free', 'D', 'D', 'Free']
 
 Population Size 40
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
 No short Project sessions: 20/20
 All three requirements met: 20/20
-Mean final best fitness: -71.15
-Best schedule: seed 5, generation 64, fitness -65
-Unavailable slots: Wed slot 3, Fri slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
-Mon : ['B', 'B', 'B', 'D']
-Tue : ['Free', 'B', 'B', 'A']
-Wed : ['A', 'A', 'Free', 'A']
-Thu : ['C', 'Free', 'C', 'C']
-Fri : ['Free', 'D', 'D', 'Free']
-
-Population Size 80
-All deadlines met: 20/20
-No unavailable-slot conflicts: 20/20
-No short Project sessions: 20/20
-All three requirements met: 20/20
-Mean final best fitness: -71.25
-Best schedule: seed 12, generation 44, fitness -65
+Mean final best fitness: -71.35
+Best schedule: seed 9, generation 26, fitness -65
 Unavailable slots: Wed slot 3, Thu slot 2
 Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
 Mon : ['B', 'B', 'B', 'D']
 Tue : ['B', 'B', 'A', 'Free']
 Wed : ['A', 'A', 'Free', 'A']
 Thu : ['C', 'Free', 'C', 'C']
-Fri : ['Free', 'Free', 'D', 'D']
+Fri : ['D', 'Free', 'Free', 'D']
 
+Population Size 80
+All deadlines met: 20/20
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 20/20
+All three requirements met: 20/20
+Mean final best fitness: -70.60
+Best schedule: seed 5, generation 24, fitness -65
+Unavailable slots: Wed slot 3, Fri slot 1
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'B', 'B', 'A']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'C', 'C', 'Free']
+Fri : ['Free', 'D', 'Free', 'D']

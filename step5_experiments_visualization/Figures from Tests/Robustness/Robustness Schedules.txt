@@ -1,47 +1,46 @@
-Robustness: five individual seeds, 20 generations
+Robustness: five individual seeds, 100 generations
 
-Best schedule: seed 1, generation 14, fitness -81
+Best schedule: seed 1, generation 24, fitness -75
 Unavailable slots: Mon slot 3, Tue slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=71, balance=2
-Mon : ['D', 'C', 'Free', 'C']
-Tue : ['Free', 'A', 'C', 'A']
-Wed : ['B', 'B', 'A', 'A']
-Thu : ['B', 'B', 'B', 'Free']
-Fri : ['D', 'D', 'Free', 'Free']
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=65, balance=2
+Mon : ['B', 'B', 'Free', 'D']
+Tue : ['Free', 'A', 'A', 'A']
+Wed : ['B', 'B', 'B', 'A']
+Thu : ['Free', 'C', 'C', 'C']
+Fri : ['D', 'Free', 'Free', 'D']
 
-Best schedule: seed 2, generation 20, fitness -72
+Best schedule: seed 2, generation 15, fitness -76
 Unavailable slots: Mon slot 1, Fri slot 3
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=62, balance=2
-Mon : ['Free', 'B', 'B', 'B']
-Tue : ['D', 'A', 'C', 'C']
-Wed : ['Free', 'A', 'A', 'A']
-Thu : ['C', 'B', 'B', 'Free']
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=66, balance=2
+Mon : ['Free', 'D', 'C', 'C']
+Tue : ['B', 'B', 'A', 'C']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['Free', 'B', 'B', 'B']
 Fri : ['Free', 'D', 'Free', 'D']
 
-Best schedule: seed 3, generation 18, fitness -77
+Best schedule: seed 3, generation 50, fitness -69
 Unavailable slots: Tue slot 3, Fri slot 4
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=57, balance=4
-Mon : ['B', 'B', 'B', 'C']
-Tue : ['D', 'A', 'Free', 'A']
-Wed : ['A', 'B', 'B', 'A']
-Thu : ['C', 'Free', 'C', 'Free']
-Fri : ['D', 'D', 'Free', 'Free']
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['C', 'A', 'Free', 'C']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['B', 'B', 'C', 'Free']
+Fri : ['D', 'Free', 'D', 'Free']
 
-Best schedule: seed 4, generation 20, fitness -74
+Best schedule: seed 4, generation 17, fitness -69
 Unavailable slots: Tue slot 1, Wed slot 4
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=64, balance=2
-Mon : ['A', 'D', 'B', 'B']
-Tue : ['Free', 'C', 'C', 'A']
-Wed : ['A', 'A', 'C', 'Free']
-Thu : ['Free', 'B', 'B', 'B']
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'C', 'A', 'C']
+Wed : ['A', 'A', 'A', 'Free']
+Thu : ['C', 'B', 'B', 'Free']
 Fri : ['Free', 'Free', 'D', 'D']
 
-Best schedule: seed 5, generation 18, fitness -72
+Best schedule: seed 5, generation 22, fitness -69
 Unavailable slots: Wed slot 3, Fri slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=62, balance=2
-Mon : ['B', 'B', 'B', 'A']
-Tue : ['D', 'C', 'A', 'Free']
-Wed : ['A', 'C', 'Free', 'A']
-Thu : ['C', 'B', 'B', 'Free']
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+Mon : ['D', 'B', 'B', 'B']
+Tue : ['A', 'C', 'Free', 'C']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['Free', 'C', 'B', 'B']
 Fri : ['Free', 'D', 'D', 'Free']
-

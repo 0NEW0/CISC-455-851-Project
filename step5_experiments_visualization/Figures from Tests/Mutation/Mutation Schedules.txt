@@ -1,77 +1,76 @@
-Mutation Rate: seeds 1–20, 20 generations per run
+Mutation Rate: seeds 1–20, 100 generations per run
 
 Mutation Rate 1
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 19/20
-All three requirements met: 19/20
-Mean final best fitness: -77.00
-Best schedule: seed 6, generation 9, fitness -71
-Unavailable slots: Mon slot 4, Fri slot 3
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=71, balance=0
-Mon : ['B', 'B', 'B', 'Free']
-Tue : ['A', 'C', 'C', 'Free']
-Wed : ['A', 'A', 'Free', 'A']
-Thu : ['C', 'B', 'B', 'Free']
-Fri : ['D', 'D', 'Free', 'D']
+No short Project sessions: 20/20
+All three requirements met: 20/20
+Mean final best fitness: -69.20
+Best schedule: seed 4, generation 43, fitness -65
+Unavailable slots: Tue slot 1, Wed slot 4
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'A', 'B', 'B']
+Wed : ['A', 'A', 'A', 'Free']
+Thu : ['C', 'C', 'Free', 'C']
+Fri : ['Free', 'Free', 'D', 'D']
 
 Mutation Rate 0.5
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 19/20
-All three requirements met: 19/20
-Mean final best fitness: -77.45
-Best schedule: seed 8, generation 18, fitness -69
-Unavailable slots: Tue slot 4, Wed slot 2
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
+No short Project sessions: 20/20
+All three requirements met: 20/20
+Mean final best fitness: -71.90
+Best schedule: seed 12, generation 23, fitness -65
+Unavailable slots: Wed slot 3, Thu slot 2
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
 Mon : ['B', 'B', 'B', 'D']
-Tue : ['C', 'C', 'A', 'Free']
-Wed : ['A', 'Free', 'A', 'A']
-Thu : ['Free', 'B', 'B', 'C']
-Fri : ['D', 'Free', 'D', 'Free']
+Tue : ['A', 'Free', 'B', 'B']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'Free', 'C', 'C']
+Fri : ['Free', 'Free', 'D', 'D']
 
 Mutation Rate 0.25
 All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 18/20
-All three requirements met: 18/20
-Mean final best fitness: -77.05
-Best schedule: seed 7, generation 15, fitness -69
-Unavailable slots: Tue slot 4, Wed slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
-Mon : ['B', 'B', 'B', 'A']
-Tue : ['B', 'B', 'C', 'Free']
-Wed : ['Free', 'A', 'A', 'A']
-Thu : ['C', 'Free', 'D', 'C']
+No short Project sessions: 20/20
+All three requirements met: 20/20
+Mean final best fitness: -72.30
+Best schedule: seed 5, generation 22, fitness -65
+Unavailable slots: Wed slot 3, Fri slot 1
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
+Mon : ['D', 'B', 'B', 'B']
+Tue : ['Free', 'B', 'B', 'A']
+Wed : ['A', 'A', 'Free', 'A']
+Thu : ['C', 'Free', 'C', 'C']
 Fri : ['Free', 'D', 'Free', 'D']
 
 Mutation Rate 0.125
 All deadlines met: 20/20
-No unavailable-slot conflicts: 19/20
-No short Project sessions: 18/20
-All three requirements met: 17/20
-Mean final best fitness: -126.50
-Best schedule: seed 3, generation 16, fitness -69
-Unavailable slots: Tue slot 3, Fri slot 4
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=59, balance=2
-Mon : ['D', 'B', 'B', 'B']
-Tue : ['A', 'A', 'Free', 'A']
-Wed : ['A', 'B', 'B', 'Free']
-Thu : ['C', 'C', 'Free', 'C']
-Fri : ['Free', 'D', 'D', 'Free']
+No unavailable-slot conflicts: 20/20
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -72.75
+Best schedule: seed 4, generation 70, fitness -65
+Unavailable slots: Tue slot 1, Wed slot 4
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['Free', 'A', 'B', 'B']
+Wed : ['A', 'A', 'A', 'Free']
+Thu : ['C', 'Free', 'C', 'C']
+Fri : ['D', 'Free', 'Free', 'D']
 
 Mutation Rate 0.0625
-All deadlines met: 19/20
+All deadlines met: 20/20
 No unavailable-slot conflicts: 20/20
-No short Project sessions: 17/20
-All three requirements met: 16/20
-Mean final best fitness: -133.00
-Best schedule: seed 7, generation 16, fitness -72
-Unavailable slots: Tue slot 4, Wed slot 1
-Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=62, balance=2
-Mon : ['C', 'D', 'B', 'B']
-Tue : ['C', 'A', 'C', 'Free']
-Wed : ['Free', 'A', 'A', 'A']
-Thu : ['B', 'B', 'B', 'Free']
-Fri : ['Free', 'D', 'Free', 'D']
-
+No short Project sessions: 19/20
+All three requirements met: 19/20
+Mean final best fitness: -72.60
+Best schedule: seed 17, generation 66, fitness -65
+Unavailable slots: Thu slot 3, Fri slot 3
+Penalties: deadline=0, slot conflicts=0, short sessions=0, priority=55, balance=2
+Mon : ['B', 'B', 'B', 'D']
+Tue : ['A', 'B', 'B', 'Free']
+Wed : ['A', 'Free', 'A', 'A']
+Thu : ['C', 'C', 'Free', 'C']
+Fri : ['D', 'D', 'Free', 'Free']
