@@ -1,0 +1,7 @@
+AI Use Disclosure
+
+We used ChatGPT to discuss the trade-offs of different genetic operators and as a pair-programming assistant while building experiments that compared how crossover strategies and tournament sizes affect solution quality.
+
+For Step 4, we used AI to brainstorm advanced evolutionary algorithm strategies, debug code, and organize the Step 4 README. We also used AI to generate Mermaid code that we used in draw.io to create diagrams of the algorithms.
+
+For the main README, we used OpenAI Codex to summarize the project details, organize the sections, and revise the wording.
