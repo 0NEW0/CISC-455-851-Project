@@ -127,8 +127,9 @@ fitness = -(1000 * deadline_penalty + priority_penalty + 5 * balance_penalty
 ## 5. Genetic Algorithm and Experiments (Parts 3–5)
 
 - **Part 3: Genetic operators.** Tournament selection chooses parents. Two crossover strategies and swap mutation produce offspring while preserving task hours. See the [operator design report](step3_genetic_operators/REPORT.md).
-- **Part 4: GA implementation.** `run_ga()` defaults to a population of 50, 100 generations, 80% crossover, 30% mutation, and 2 elites. It returns the best schedule and each generation's best and average fitness. The initial population is generation 0. See the [GA and survival strategies report](step4_ga_implementation/README_step4.md).
-- **Part 5: Experiments and visualization.** `visualize.py` runs five experiments with the updated fitness function: random seeds, population size, mutation rate, crossover rate, and elite count. The population-size sweep runs for 100 generations; the other experiments run for 20. See the [experiment report](step5_experiments_visualization/README_part5.md).
+- **Part 4: GA implementation & Advanced Strategies.** The core GA (`run_ga()`) uses a population of 50, 100 generations, and elitist survival. To add "healthy complexity" and enhance the core search process, we engineered three advanced EA strategies: **Memetic Local Search**, **Island Model Migration**, and **Adaptive Penalties**. 
+  - *For a comprehensive breakdown of the two-phase experimental methodology, algorithmic design, and the trade-offs of each advanced strategy, please refer to the detailed **[Step 4 Report](step4_ga_implementation/README_step4.md)**.*
+- **Part 5: Experiments and visualization.** `visualize.py` runs parameter sweeps (population size, mutation rate, crossover rate, elite count) and robustness tests. See the [experiment report](step5_experiments_visualization/README_part5.md).
 
 **Experiment method:** Each parameter setting uses the same 20 distinct seeds. The script averages the trials' best fitness separately for each generation, starting at generation 0, and prints the highest-scoring individual schedule. The five robustness plots show individual seeds.
 

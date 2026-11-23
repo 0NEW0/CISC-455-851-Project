@@ -16,43 +16,23 @@ from step3_genetic_operators.genetic_operators import crossover, mutate, select_
 
 # ---------------------------------------------------------------------------
 # Parameter choices
-# These are reasonable starting values, NOT tuned or proven optimal. Each has
-# a short reason so it can be explained and defended.
 # ---------------------------------------------------------------------------
-# 50 schedules: the search space is about 20!/(4!5!3!3!5!) = 195,545,750,400
-# (~1.96e11) arrangements, so 50 gives some diversity while 100 generations
-# still run in a fraction of a second.
 POPULATION_SIZE = 50
-# Project requirement: roughly 100 generations. This is also the only stopping
-# condition (fixed budget), which keeps runs comparable for Step 5.
 GENERATIONS = 100
-# High rate: recombining good schedules is the main source of progress.
 CROSSOVER_RATE = 0.8
-# mutate() applies ONE swap per chromosome with this probability. A moderate
-# rate keeps diversity without constantly destroying good schedules.
 MUTATION_RATE = 0.3
-# Size 3 gives moderate selection pressure (best of 3 random individuals).
 TOURNAMENT_SIZE = 3
-# Elitism (used by the "elitist" scheme): the best 2 schedules are copied
-# unchanged, so the best fitness can never get worse between generations.
 ELITE_COUNT = 2
-# Step 3's default strategy; both strategies always keep task counts valid.
 CROSSOVER_STRATEGY = "two_point_repair"
 
-# How the next population is chosen ("survival scheme"):
-#   elitist          keep the best ELITE_COUNT, fill the rest with children (default)
-#   mu_comma_lambda  only children survive (no elitism)
-#   mu_plus_lambda   parents and children compete, the best population_size survive
-#   steady_state     make 2 children at a time, replace the 2 worst
-# Every scheme creates about population_size children per generation, so they
-# use almost the same number of fitness evaluations.
 SURVIVAL_SCHEMES = ("elitist", "mu_comma_lambda", "mu_plus_lambda", "steady_state")
 SURVIVAL = "elitist"
 
 
 def _make_offspring(population, count, crossover_rate, mutation_rate,
-                    tournament_size, crossover_strategy, rng, score):
-    """Create `count` children: tournament selection -> crossover -> mutation."""
+                    tournament_size, crossover_strategy, rng, score,
+                    repair_function=None):
+    """Create `count` children: tournament selection -> crossover -> mutation -> repair."""
     offspring = []
     while len(offspring) < count:
         parent1 = select_parent(population, score, rng, tournament_size)
@@ -60,9 +40,20 @@ def _make_offspring(population, count, crossover_rate, mutation_rate,
         child1, child2 = crossover(
             parent1, parent2, crossover_rate, rng, crossover_strategy
         )
-        offspring.append(mutate(child1, mutation_rate, rng))
+        
+        # Mutate child 1
+        child1 = mutate(child1, mutation_rate, rng)
+        if repair_function is not None:
+            child1 = repair_function(child1, rng, score)
+        offspring.append(child1)
+        
         if len(offspring) < count:
-            offspring.append(mutate(child2, mutation_rate, rng))
+            # Mutate child 2
+            child2 = mutate(child2, mutation_rate, rng)
+            if repair_function is not None:
+                child2 = repair_function(child2, rng, score)
+            offspring.append(child2)
+            
     return offspring
 
 
@@ -87,33 +78,12 @@ def run_ga(
     seed=None,
     *,
     use_constraints=True,
+    # --- NEW ADVANCED HOOKS ---
+    repair_function=None,
+    score_override=None,
+    generation_callback=None,
 ):
-    """Run the GA and return a dictionary of results.
-
-    Population management: generational replacement. The default scheme is
-    "elitist": each new generation = the elite_count best schedules (copied) +
-    children made by tournament selection -> crossover -> swap mutation. The
-    population size stays constant. See SURVIVAL_SCHEMES for the alternatives.
-    elite_count is only used by the "elitist" scheme.
-
-    The default scorer includes unavailable slots and minimum session lengths.
-    Set use_constraints=False to reproduce the baseline scoring.
-
-    Reproducibility: if seed is given, both the operators' random generator and
-    Python's global random module (used by Part 1 to build the initial
-    population) are seeded, so the same seed reproduces the whole run.
-
-    Returned keys (for Step 5):
-        best_chromosome      best schedule found (list of 20 genes)
-        best_fitness         its fitness (higher is better, <= 0)
-        best_breakdown       its penalty components from evaluate_fitness()
-        best_generation      generation in which the best schedule first appeared
-        best_history         best fitness per generation, index 0 = initial
-                             population (length generations + 1)
-        average_history      average fitness per generation, same indexing
-        parameters           settings used, including seed and Python version,
-                             plus the two unavailable slots drawn for the run
-    """
+    """Run the GA and return a dictionary of results."""
     if not isinstance(population_size, int) or population_size < 2:
         raise ValueError("Population size must be an integer of at least 2.")
     if not isinstance(generations, int) or generations < 1:
@@ -128,18 +98,32 @@ def run_ga(
     # Draw once from a separate stream so the slots stay fixed across generations.
     unavailable_slots = choose_unavailable_slots(seed)
     scored_slots = unavailable_slots if use_constraints else None
-    score = partial(fitness_function, unavailable_slots=scored_slots) if use_constraints else fitness_function
+    
+    # --- HOOK: Score Override ---
+    if score_override is not None:
+        score = score_override
+    elif use_constraints:
+        score = partial(fitness_function, unavailable_slots=scored_slots)
+    else:
+        score = fitness_function
+        
     rng = random.Random(seed)
     if seed is not None:
         random.seed(seed)  # Part 1 uses the global random module
 
+    # Include repair_function in the settings tuple passed to _make_offspring
     offspring_settings = (crossover_rate, mutation_rate, tournament_size,
-                          crossover_strategy, rng, score)
+                          crossover_strategy, rng, score, repair_function)
+                          
     population = create_population(population_size)
     best_chromosome, best_fitness, best_generation = None, float("-inf"), 0
     best_history, average_history = [], []
 
     for generation in range(generations + 1):
+        # --- HOOK: Generation Callback (e.g., Island Migration) ---
+        if generation_callback is not None:
+            population = generation_callback(population, generation, rng)
+
         # Evaluate each schedule once per generation.
         scored = _rank(population, score)
         gen_best_fitness, gen_best = scored[0]
